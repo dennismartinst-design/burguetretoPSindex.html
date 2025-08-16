@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisa de Satisfação - BURGUERETTO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Open+Sans:wght@400;600;700&display=swap');
+        
+        .star {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .star:hover {
+            transform: scale(1.1);
+        }
+        
+        .star.filled {
+            color: #fbbf24;
+        }
+        
+        .star.empty {
+            color: #d1d5db;
+        }
+        
+        .burger-bg {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        }
+        
+        .waiter-name {
+            background: #fef3c7;
+            border: 2px dashed #f59e0b;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .waiter-name[contenteditable="true"]:focus {
+            outline: none;
+            background: #fef9c3;
+            border-color: #d97706;
+        }
+    </style>
+</head>
+<body class="bg-yellow-50 min-h-screen">
+    <!-- Header -->
+    <div class="burger-bg text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-2" style="font-family: 'Fredoka One', cursive;">
+                🍔 BURGUERETTO 🍔
+            </h1>
+            <h2 class="text-2xl md:text-3xl font-semibold mb-4">PESQUISA DE SATISFAÇÃO</h2>
+            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4 max-w-2xl mx-auto">
+                <p class="text-lg leading-relaxed">
+                    Queremos sempre oferecer a melhor experiência para você! Sua avaliação nos ajuda a aprimorar nossos hambúrgueres e atendimento. Agradecemos imensamente sua visita e esperamos recebê-lo novamente em breve. <strong>MUITO OBRIGADO!</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Survey Form -->
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <form id="satisfactionForm" class="space-y-8">
+            
+            <!-- Question 1: Hamburger Rating -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-red-500">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    🍔 Como você avalia o hambúrguer que comeu?
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                    <div class="text-center">
+                        <div class="star-rating" data-rating="1" data-question="burger">
+                            <div class="text-2xl mb-2">⭐</div>
+                            <p class="font-semibold text-red-600">Ruim</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="star-rating" data-rating="2" data-question="burger">
+                            <div class="text-2xl mb-2">⭐⭐</div>
+                            <p class="font-semibold text-orange-600">Moderado</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="star-rating" data-rating="3" data-question="burger">
+                            <div class="text-2xl mb-2">⭐⭐⭐</div>
+                            <p class="font-semibold text-yellow-600">Bom</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="star-rating" data-rating="4" data-question="burger">
+                            <div class="text-2xl mb-2">⭐⭐⭐⭐</div>
+                            <p class="font-semibold text-green-600">Ótimo</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="star-rating" data-rating="5" data-question="burger">
+                            <div class="text-2xl mb-2">⭐⭐⭐⭐⭐</div>
+                            <p class="font-semibold text-green-700">Excelente</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Outras opções:</label>
+                    <textarea 
+                        name="burger_comments" 
+                        rows="3" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none"
+                        placeholder="Conte-nos mais sobre sua experiência com o hambúrguer...">
+                    </textarea>
+                </div>
+            </div>
+
+            <!-- Question 2: Service Rating -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    👨‍🍳 Como você avalia o atendimento que recebeu?
+                </h3>
+                
+                <!-- Editable Waiters Section -->
+                <div class="mb-6 p-4 bg-yellow-50 rounded-lg border-2 border-yellow-200">
+                    <h4 class="text-lg font-semibold text-gray-700 mb-3">Quem te atendeu hoje? (Clique para editar os nomes)</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="waiter-name rounded-lg p-2 text-center font-medium cursor-pointer" contenteditable="true">
+                            João
+                        </div>
+                        <div class="waiter-name rounded-lg p-2 text-center font-medium cursor-pointer" contenteditable="true">
+                            Maria
+                        </div>
+                        <div class="waiter-name rounded-lg p-2 text-center font-medium cursor-pointer" contenteditable="true">
+                            Pedro
+                        </div>
+                        <div class="waiter-name rounded-lg p-2 text-center font-medium cursor-pointer" contenteditable="true">
+                            Ana
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                    <div class="text-center">
+                        <div class="star-rating" data-rating="1" data-question="service">
+                            <div class="text-2xl mb-2">⭐</div>
+                            <p class="font-semibold text-red-600">Ruim</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="star-rating" data-rating="2" data-question="service">
+                            <div class="text-2xl mb-2">⭐⭐</div>
+                            <p class="font-semibold text-orange-600">Moderado</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="star-rating" data-rating="3" data-question="service">
+                            <div class="text-2xl mb-2">⭐⭐⭐</div>
+                            <p class="font-semibold text-yellow-600">Bom</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="star-rating" data-rating="4" data-question="service">
+                            <div class="text-2xl mb-2">⭐⭐⭐⭐</div>
+                            <p class="font-semibold text-green-600">Ótimo</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="star-rating" data-rating="5" data-question="service">
+                            <div class="text-2xl mb-2">⭐⭐⭐⭐⭐</div>
+                            <p class="font-semibold text-green-700">Excelente</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Outras opções:</label>
+                    <textarea 
+                        name="service_comments" 
+                        rows="3" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                        placeholder="Conte-nos mais sobre o atendimento que recebeu...">
+                    </textarea>
+                </div>
+            </div>
+
+            <!-- General Comments -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    💬 Deixe seu comentário
+                </h3>
+                <textarea 
+                    name="general_comments" 
+                    rows="4" 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 resize-none"
+                    placeholder="Queremos ouvir sua opinião! Sugestões, elogios, críticas... tudo é bem-vindo!">
+                </textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button 
+                    type="submit" 
+                    class="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded-full text-xl transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    🍔 Enviar Avaliação 🍔
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Admin Panel (Hidden by default) -->
+    <div id="adminPanel" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-xl shadow-2xl p-6 max-w-2xl w-full max-h-96 overflow-y-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-2xl font-bold text-gray-800">📊 Painel Administrativo</h3>
+                    <button onclick="closeAdmin()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                        <h4 class="font-semibold text-red-800">Total de Avaliações</h4>
+                        <p id="totalCount" class="text-2xl font-bold text-red-600">0</p>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h4 class="font-semibold text-yellow-800">Média Hambúrgueres</h4>
+                        <p id="burgerAvg" class="text-2xl font-bold text-yellow-600">0.0 ⭐</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                        <h4 class="font-semibold text-blue-800">Média Atendimento</h4>
+                        <p id="serviceAvg" class="text-2xl font-bold text-blue-600">0.0 ⭐</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                        <h4 class="font-semibold text-green-800">Última Avaliação</h4>
+                        <p id="lastEval" class="text-sm text-green-600">Nenhuma ainda</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button onclick="downloadCSV()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold flex-1">
+                        📊 Baixar Planilha CSV
+                    </button>
+                    <button onclick="clearData()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold flex-1">
+                        🗑️ Limpar Dados
+                    </button>
+                    <button onclick="showQR()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold flex-1">
+                        📱 Mostrar QR Code
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div id="qrModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full text-center">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-800">📱 QR Code para Avaliação</h3>
+                    <button onclick="closeQR()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                </div>
+                
+                <div class="mb-4">
+                    <div id="qrcode" class="flex justify-center mb-4"></div>
+                    <p class="text-sm text-gray-600 mb-2">Escaneie para acessar a pesquisa</p>
+                    <p class="text-xs text-gray-500 break-all" id="currentUrl"></p>
+                </div>
+                
+                <button onclick="printQR()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold w-full">
+                    🖨️ Imprimir QR Code
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Access Button (Hidden) -->
+    <div class="fixed bottom-4 right-4">
+        <div id="adminAccess" class="hidden">
+            <button onclick="openAdmin()" class="bg-gray-800 hover:bg-gray-900 text-white p-3 rounded-full shadow-lg">
+                ⚙️
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="burger-bg text-white py-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-lg font-semibold">Obrigado por escolher o BURGUERETTO! 🍔❤️</p>
+            <p class="text-sm opacity-90 mt-2">Sua opinião nos ajuda a servir sempre melhor!</p>
+            <!-- Secret admin access -->
+            <p class="text-xs opacity-50 mt-4 cursor-pointer" onclick="toggleAdmin()">© 2025 BURGUERETTO</p>
+        </div>
+    </footer>
+
+    <script>
+        // Star rating functionality
+        document.querySelectorAll('.star-rating').forEach(rating => {
+            rating.addEventListener('click', function() {
+                const question = this.dataset.question;
+                const ratingValue = this.dataset.rating;
+                
+                // Remove active class from all ratings in this question
+                document.querySelectorAll(`[data-question="${question}"]`).forEach(r => {
+                    r.classList.remove('bg-yellow-100', 'border-2', 'border-yellow-400', 'rounded-lg', 'p-3');
+                });
+                
+                // Add active class to selected rating
+                this.classList.add('bg-yellow-100', 'border-2', 'border-yellow-400', 'rounded-lg', 'p-3');
+                
+                // Store the rating value
+                this.closest('.bg-white').setAttribute(`data-${question}-rating`, ratingValue);
+            });
+        });
+
+        // Function to save data to localStorage and generate CSV
+        function saveResponse(data) {
+            // Get existing responses from localStorage
+            let responses = JSON.parse(localStorage.getItem('burguerettoResponses') || '[]');
+            
+            // Add new response with timestamp
+            data.timestamp = new Date().toLocaleString('pt-BR');
+            data.id = Date.now();
+            responses.push(data);
+            
+            // Save back to localStorage
+            localStorage.setItem('burguerettoResponses', JSON.stringify(responses));
+            
+            // Update statistics
+            updateStatistics();
+            
+            return responses.length;
+        }
+
+        // Function to download CSV
+        function downloadCSV() {
+            const responses = JSON.parse(localStorage.getItem('burguerettoResponses') || '[]');
+            
+            if (responses.length === 0) {
+                alert('Nenhuma resposta encontrada para exportar!');
+                return;
+            }
+            
+            // CSV headers
+            let csv = 'Data/Hora,Avaliação Hambúrguer,Comentário Hambúrguer,Avaliação Atendimento,Comentário Atendimento,Comentário Geral,Garçons\n';
+            
+            // Add data rows
+            responses.forEach(response => {
+                const row = [
+                    response.timestamp,
+                    response.burgerRating + ' estrelas',
+                    '"' + (response.burgerComments || '').replace(/"/g, '""') + '"',
+                    response.serviceRating + ' estrelas',
+                    '"' + (response.serviceComments || '').replace(/"/g, '""') + '"',
+                    '"' + (response.generalComments || '').replace(/"/g, '""') + '"',
+                    '"' + response.waiters.join(', ') + '"'
+                ].join(',');
+                csv += row + '\n';
+            });
+            
+            // Download file
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `burgueretto_avaliacoes_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Function to update statistics
+        function updateStatistics() {
+            const responses = JSON.parse(localStorage.getItem('burguerettoResponses') || '[]');
+            
+            if (responses.length === 0) return;
+            
+            // Calculate averages
+            const burgerAvg = responses.reduce((sum, r) => sum + parseInt(r.burgerRating), 0) / responses.length;
+            const serviceAvg = responses.reduce((sum, r) => sum + parseInt(r.serviceRating), 0) / responses.length;
+            
+            console.log(`📊 ESTATÍSTICAS BURGUERETTO:
+Total de avaliações: ${responses.length}
+Média Hambúrgueres: ${burgerAvg.toFixed(1)} estrelas
+Média Atendimento: ${serviceAvg.toFixed(1)} estrelas`);
+        }
+
+        // Form submission
+        document.getElementById('satisfactionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get ratings
+            const burgerRating = document.querySelector('[data-burger-rating]')?.getAttribute('data-burger-rating') || '0';
+            const serviceRating = document.querySelector('[data-service-rating]')?.getAttribute('data-service-rating') || '0';
+            
+            // Get comments
+            const burgerComments = document.querySelector('textarea[name="burger_comments"]').value;
+            const serviceComments = document.querySelector('textarea[name="service_comments"]').value;
+            const generalComments = document.querySelector('textarea[name="general_comments"]').value;
+            
+            // Get waiter names
+            const waiters = Array.from(document.querySelectorAll('.waiter-name')).map(el => el.textContent.trim());
+            
+            // Prepare data object
+            const responseData = {
+                burgerRating: burgerRating,
+                burgerComments: burgerComments,
+                serviceRating: serviceRating,
+                serviceComments: serviceComments,
+                generalComments: generalComments,
+                waiters: waiters
+            };
+            
+            // Save response
+            const totalResponses = saveResponse(responseData);
+            
+            // Show success message
+            alert(`🍔 OBRIGADO PELA SUA AVALIAÇÃO! 🍔
+
+Hambúrguer: ${burgerRating} estrela(s)
+Atendimento: ${serviceRating} estrela(s)
+
+Sua opinião é muito valiosa para nós!
+Esperamos vê-lo novamente em breve no BURGUERETTO! ❤️
+
+(Avaliação #${totalResponses} registrada)`);
+            
+            // Reset form
+            this.reset();
+            document.querySelectorAll('.star-rating').forEach(r => {
+                r.classList.remove('bg-yellow-100', 'border-2', 'border-yellow-400', 'rounded-lg', 'p-3');
+            });
+        });
+
+        // Admin functions
+        let adminVisible = false;
+        
+        function toggleAdmin() {
+            adminVisible = !adminVisible;
+            document.getElementById('adminAccess').classList.toggle('hidden', !adminVisible);
+        }
+        
+        function openAdmin() {
+            document.getElementById('adminPanel').classList.remove('hidden');
+            updateAdminStats();
+        }
+        
+        function closeAdmin() {
+            document.getElementById('adminPanel').classList.add('hidden');
+        }
+        
+        function updateAdminStats() {
+            const responses = JSON.parse(localStorage.getItem('burguerettoResponses') || '[]');
+            
+            document.getElementById('totalCount').textContent = responses.length;
+            
+            if (responses.length > 0) {
+                const burgerAvg = responses.reduce((sum, r) => sum + parseInt(r.burgerRating), 0) / responses.length;
+                const serviceAvg = responses.reduce((sum, r) => sum + parseInt(r.serviceRating), 0) / responses.length;
+                
+                document.getElementById('burgerAvg').textContent = burgerAvg.toFixed(1) + ' ⭐';
+                document.getElementById('serviceAvg').textContent = serviceAvg.toFixed(1) + ' ⭐';
+                
+                const lastResponse = responses[responses.length - 1];
+                document.getElementById('lastEval').textContent = lastResponse.timestamp;
+            } else {
+                document.getElementById('burgerAvg').textContent = '0.0 ⭐';
+                document.getElementById('serviceAvg').textContent = '0.0 ⭐';
+                document.getElementById('lastEval').textContent = 'Nenhuma ainda';
+            }
+        }
+        
+        function clearData() {
+            if (confirm('Tem certeza que deseja apagar todas as avaliações? Esta ação não pode ser desfeita!')) {
+                localStorage.removeItem('burguerettoResponses');
+                updateAdminStats();
+                alert('Dados limpos com sucesso!');
+            }
+        }
+        
+        function showQR() {
+            document.getElementById('qrModal').classList.remove('hidden');
+            generateQRCode();
+        }
+        
+        function closeQR() {
+            document.getElementById('qrModal').classList.add('hidden');
+        }
+        
+        function generateQRCode() {
+            const currentUrl = window.location.href;
+            document.getElementById('currentUrl').textContent = currentUrl;
+            
+            // Clear previous QR code
+            document.getElementById('qrcode').innerHTML = '';
+            
+            // Generate QR code using a simple method
+            const qrText = currentUrl;
+            const qrSize = 200;
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${qrSize}x${qrSize}&data=${encodeURIComponent(qrText)}`;
+            
+            const qrImg = document.createElement('img');
+            qrImg.src = qrApiUrl;
+            qrImg.alt = 'QR Code para Pesquisa BURGUERETTO';
+            qrImg.className = 'mx-auto border-2 border-gray-300 rounded-lg';
+            
+            document.getElementById('qrcode').appendChild(qrImg);
+        }
+        
+        function printQR() {
+            const qrImg = document.querySelector('#qrcode img');
+            if (qrImg) {
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>QR Code - BURGUERETTO</title>
+                            <style>
+                                body { 
+                                    font-family: Arial, sans-serif; 
+                                    text-align: center; 
+                                    padding: 20px; 
+                                }
+                                .header { 
+                                    color: #dc2626; 
+                                    font-size: 24px; 
+                                    font-weight: bold; 
+                                    margin-bottom: 10px; 
+                                }
+                                .subtitle { 
+                                    font-size: 18px; 
+                                    margin-bottom: 20px; 
+                                }
+                                .instructions { 
+                                    font-size: 14px; 
+                                    margin-top: 20px; 
+                                    color: #666; 
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="header">🍔 BURGUERETTO 🍔</div>
+                            <div class="subtitle">PESQUISA DE SATISFAÇÃO</div>
+                            <img src="${qrImg.src}" alt="QR Code" style="border: 2px solid #ccc; border-radius: 8px;">
+                            <div class="instructions">
+                                <p><strong>Como usar:</strong></p>
+                                <p>1. Abra a câmera do seu celular</p>
+                                <p>2. Aponte para o QR Code</p>
+                                <p>3. Toque no link que aparecer</p>
+                                <p>4. Avalie nossa hamburgueria!</p>
+                                <br>
+                                <p><em>Sua opinião é muito importante para nós!</em></p>
+                            </div>
+                        </body>
+                    </html>
+                `);
+                printWindow.document.close();
+                printWindow.print();
+            }
+        }
+
+        // Waiter name editing functionality
+        document.querySelectorAll('.waiter-name').forEach(nameEl => {
+            nameEl.addEventListener('click', function() {
+                this.focus();
+            });
+            
+            nameEl.addEventListener('blur', function() {
+                if (this.textContent.trim() === '') {
+                    this.textContent = 'Nome do Garçom';
+                }
+            });
+            
+            nameEl.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.blur();
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9701d7d9e469f1db',t:'MTc1NTM1Njg2NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
